@@ -17,11 +17,14 @@ def getText(filename, token_str, cu_id, upvoice_url):
     data['speech'] = base64.b64encode(voice_data).decode('utf-8')
     post_data = json.dumps(data)    
     r = requests.post(upvoice_url, data=bytes(post_data))
-    start = r.text.find('result')
-    end = r.text.find('sn')
+    r = json.loads(r.text)
+    #start = r.text.find('result')
+    #end = r.text.find('sn')
     #r = requests.post(upvoice_url, data=json.dumps(data))
+    return r.get('result')
     #return r.text[start+8:end-2]
-    return r.text
+    #return r.text
+
 
 '''if __name__ == "__main__":
     token_url = "https://openapi.baidu.com/oauth/2.0/token" 
