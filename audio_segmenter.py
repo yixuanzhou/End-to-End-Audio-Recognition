@@ -1,4 +1,4 @@
-from pydub import AudioSegment
+#from pydub import AudioSegment
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -51,14 +51,15 @@ def audio_segment(audio_url, seg_points):
 	count = 0
 	logging.info("Audio duration: %s s" %(duration))
 	for seg_point in seg_points:
-		start, end = seg_point[0], seg_point[1]
-		logging.info("Begin segmenting: from %s to %s" %(start, end))
-		filename = "c3_0629_%s_%s.wav" % (start, end)
-		#filename = "0629-%s.wav" %(count)
-		filepath = './segs/'
-		segmented_audio = audio[int(start * 1000): int(end * 1000)]
-		segmented_audio.export(filepath + filename, format="wav")
-		count += 1
+		if seg_point[0] == 1:
+			start, end = seg_point[1], seg_point[2]
+			logging.info("Begin segmenting: from %s to %s" %(start, end))
+			filename = "c3_0629_%s_%s.wav" % (start, end)
+			#filename = "0629-%s.wav" %(count)
+			filepath = './segs/'
+			segmented_audio = audio[int(start * 1000): int(end * 1000)]
+			segmented_audio.export(filepath + filename, format="wav")
+			count += 1
 	logging.info("Completed segmentation!")
 
 #audio_segment('./audiofiles/c3_0629.wav', seg_points10)

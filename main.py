@@ -27,7 +27,7 @@ if __name__ == "__main__":
 	token_str = getToken(token_url, api_key, api_secert)
 	cu_id = "9c:4e:36:b9:d6:28"
 
-	ht = HBaseAji(table='test')
+	ht = HBaseAji(table='test5')
 	typename = {0: 'music', 1: 'speech'}
     #print(getText("c3_0629_392_399.wav", token_str, cu_id, upvoice_url))
 
@@ -41,15 +41,16 @@ if __name__ == "__main__":
 		#rate = 16000
 		#recognize(signal, rate, token)
 		#print '%ss to %ss' %(start, end), getText(filename, token_str, cu_id, upvoice_url)
-			text = str(getText(filename, token_str, cu_id, upvoice_url))
+			text = getText(filename, token_str, cu_id, upvoice_url).encode('utf-8')
+			print(text)
 		else:
 			text = 'None'
 		#['m3u8', 'start_time', 'end_time', 'type', 'content']
 		try:
-			ht.put(str(index), '0', 'http://rs.ajmide.com/c_3/3.m3u8', start, end, __type, typename[__type], text)
-			print(ht.getRow(str(index)))
+			ht.put(filename, '0', filename, __type, typename[__type], text)
+			print(ht.getRow(filename))
 		except Exception as e:
-			print e
+			print(e)
 			continue
 		'''with open("segs.txt", "a") as f:
 			f.write('%ss to %ss %s\n' %(start, end, text))'''
@@ -57,3 +58,12 @@ if __name__ == "__main__":
 
 	#for i in ht.getRows([rowkey] * 4):
 	#	print i
+	tl = ht.scanWithKeyword('上海')
+	print tl
+	'''scan = Hbase.TScan()
+	scan.columns = ['content:0']
+	scan.filterString = "ValueFilter(=,'substring:上海')"
+	t = ht.client.scannerOpenWithScan('test5', scan, None)
+	result = ht.client.scannerGetList(t, 100)'''
+	
+	#print str(result).decode('utf-8')

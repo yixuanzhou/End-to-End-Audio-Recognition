@@ -40,10 +40,11 @@ def read_seg_points(audio_step, window_size):
 			time_stamp += window_size * count
 			count = 1
 	time_steps.append([flag,time_stamp,time_stamp+window_size*count])
-	for step in time_steps:
+	return time_steps
+	'''for step in time_steps:
 		if step[0] == 1:
 			seg_points.append(step[1:])
-	return seg_points
+	return seg_points'''
 
 
 def read_segment_points(audio_step, window_size):

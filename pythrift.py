@@ -19,6 +19,7 @@ def decode(s):
 class HBaseAji(object):
 
    def __init__(self, table='audio2text', host='127.0.0.1', port=9090):
+       #hdp.ajmide.net:8080
        self.table = table
        self.host = host
        self.port = port
@@ -26,14 +27,13 @@ class HBaseAji(object):
        # Connect to HBase Thrift server
        self.transport = TTransport.TBufferedTransport(TSocket.TSocket(host, port))
        self.protocol = TBinaryProtocol.TBinaryProtocolAccelerated(self.transport)
-
+       
        # Create and open the client connection
        self.client = Hbase.Client(self.protocol)
        self.transport.open()
 
        # set type and field of column families
-       self.set_column_families([str, int, int, int, str, str],\
-        ['m3u8', 'start_time', 'end_time', 'type', 'typename', 'content'])
+       self.set_column_families([int, str, str], ['type', 'typename', 'content'])
        #self.set_column_families([str, str, int], ['name', 'sex', 'age'])
        self._build_column_families()
 
@@ -182,8 +182,17 @@ class HBaseAji(object):
        self.client.scannerClose(scannerId)
        return ret
 
+   def scanWithKeyword(self, __filter):
+       scan = Hbase.TScan()
+       #print "ValueFilter(=,'substring:%s')" %(__filter)
+       scan.columns = ['content:0']
+       scan.filterString = "ValueFilter(=,'substring:%s')" %(__filter)
+       scannerId = self.client.scannerOpenWithScan(self.table, scan, {})
+       result = self.client.scannerGetList(scannerId, 100)
+       return result
+
 def demo():
-   ht = HBaseAji(table='test1')
+   ht = HBaseAji(table='1test1')
    values = [['lee', 'f', 27], ['clark', 'm', 27], ['dan', 'f', 27]]
    rowKey = 'cookie'
    ht.put(rowKey, 'fish', 'f', '22')
@@ -198,3 +207,4 @@ def demo():
 if __name__ == '__main__':
    #demo()
    pass
+   
