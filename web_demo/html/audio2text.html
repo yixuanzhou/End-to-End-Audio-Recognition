@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/music_voice.js"></script>
+<html>
+<head>
+    <title>music_voice</title>
+</head>
+<body background="img/bg.jpg" style="background-size: cover;">
+<div style="margin:75px;">
+    <div>
+        <form name="m_info" onkeydown="if(event.keyCode===13){return false;}">
+            <script>
+                document.forms[0].target="m_info";
+            </script>
+            <label id="type_selector" style="font-family:'Arial Normal', 'Arial'; color:#FFFFFF;">
+                选择处理方法:<br/>
+                <!--<input type="radio" name="type" value="knn" checked>KNN-->
+                <script>
+                    $.ajaxSetup({
+                        async : false
+                    });
+                    var url = 'http://121.40.161.184:8216/rec_types';
+                    $.getJSON(url, function (data) {
+                        if(data.code === 0) {
+                            var types = data.rec_types;
+                            var type_selector = document.getElementById('type_selector');
+                            for(var i=0; i<types.length; i++){
+                                var rd = document.createElement("input");
+                                rd.type = 'radio';
+                                rd.name = 'rec_type';
+                                rd.value = types[i];
+                                if(i === 0)
+                                    rd.setAttribute('checked', 'checked');
+                                type_selector.appendChild(rd);
+                                type_selector.appendChild(document.createTextNode(types[i]));
+                            }
+
+                        }
+                        else
+                            alert(data.msg)
+                    });
+                </script>
+            </label>
+
+            <img src=imgages/__demo/u85.png"><br/>
+            <label style="font-family:'Arial Normal', 'Arial'; color:#FFFFFF;">
+                输入音频地址转码音频:<br/>
+                <input type="url" id="m3u8_url" name="m3u8_url" style="width:300px; height:17px;"/>
+                <input type="button" value="开始上传并处理" onclick="getRecognizedResultM3U8(document.getElementById('m3u8_url').value)" style="width:140px; height:25px; background-color:transparent; font-family:'Arial Normal', 'Arial'; font-weight:400; font-style:normal; font-size:13px; text-decoration:none; color:#FFFFFF; text-align:center;">
+                <br/>
+            </label>
+            <img src="img/u85.png"><br/>
+            <label style="font-family:'Arial Normal', 'Arial'; color:#FFFFFF;">
+                或选择库中音频识别:<br/>
+                <select id="wav_url" style="width:305px; height:23px;">
+                    <option value=""></option>
+                    <script>
+                        $.ajaxSetup({
+                            async : false
+                        });
+                        var url = 'http://121.40.161.184:8216/wavfiles';
+                        $.getJSON(url, function (data) {
+                            if(data.code === 0) {
+                                var wav_list = data.files;
+                                var wav_datalist = document.getElementById("wav_url");
+                                for(var i=0; i<wav_list.length; i++){
+                                    var wav = wav_list[i];
+                                    var op=document.createElement("option");
+                                    op.setAttribute("label",wav);
+                                    op.setAttribute("value",wav);
+                                    wav_datalist.appendChild(op);
+                                }
+                            }
+                            else
+                                alert(data.msg)
+                        });
+                    </script>
+                </select>
+                <input type="button" onclick="getRecognizedResult(document.getElementById('wav_url').value)" value="开始处理" style="width:140px; height:25px; background-color:transparent; font-family:'Arial Normal', 'Arial'; font-weight:400; font-style:normal; font-size:13px; text-decoration:none; color:#FFFFFF; text-align:center;">
+                <br/>
+            </label>
+
+        </form>
+
+    </div>
+    <img src="img/u85.png"><br/>
+    <div id="status_box" contenteditable="false" style="display:none; width:440px;border:1px solid #6E6E6E;overflow-y:auto;overflow-x:hidden;background-color: #5B5B5B; color:#FFFFFF;font-family:'Arial Normal', 'Arial';"></div>
+    <div id="player_div" style="display:none">
+        <img src="img/u85.png"><br/>
+        <label id="wav_file_name" style="color:#00FDC2;font-family:'Arial Normal', 'Arial';"></label>
+        <label style="color:#FFFFFF;font-family:'Arial Normal', 'Arial';">音频</label>
+        <br/>
+        <audio style="width: 440px;" id="player" controls="controls">
+            Your browser does not support this audio format.
+        </audio>
+        <br/>
+        <table id="rec_result" style="background-color: #5b5b5b;border: 1px solid #6e6e6e;color:#ffffff;font-family:'Arial Normal', 'Arial';alignment: center; width:440px;">
+
+        </table>
+    </div>
+    <div id="text_status_box" contenteditable="false" style="display:none; width:440px;border:1px solid #6E6E6E;overflow-y:auto;overflow-x:hidden;background-color: #5B5B5B; color:#FFFFFF;font-family:'Arial Normal', 'Arial';"></div>
+    <div id="text_result" style="display: none; width:440px; overflow-y:auto;overflow-x:hidden;background-color: #FFFFFF; color:#000000;" contenteditable="false"></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>短音频搜索</title>
+    <script src="js/jquery-3.2.1.min.js"></script>
+</head>
+<body background="img/bg.jpg" onload="search()" style="background-size: cover; padding: 50px;color:#FFFFFF;">
+<form id ="search">
+    <label>
+        请输入要查询的内容：<input type="text" name="s">
+    </label>
+    <input type="submit" value="搜索">
+</form>
+<label id="count"></label>
+<div id="result" style="display: none">
+    <table>
+        <thead>
+        <tr>
+            <td>名称</td>
+            <td style="max-width: 500px;">内容</td>
+            <td>播放</td>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+</body>
+</html>
+<script src="js/search.js"></script>
