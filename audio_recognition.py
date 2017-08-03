@@ -58,7 +58,7 @@ def audio2text_multiprocessing(file_name):
     count = 0
     for s in range(0, len(seg_points), 10):
         for i, seg_point in enumerate(seg_points[s: s+10]):
-            if seg_point[2] == 0:
+            if seg_point[2] != 1:
                 continue
             token_str = get_token(token_url, api_key, api_secret)
             start, end = seg_point[0], seg_point[1]

@@ -1,26 +1,23 @@
-def audiofilter(flagsInd):
-    window_size = 8
-    i = 0
-    step, result = [], []
-    length = len(flagsInd)
-    while i < length / window_size:
-        count = 0
-        window = flagsInd[i * window_size:(i + 1) * window_size]
-        for flag in window:
-            if flag == 0:
-                count += 1
-        if count > window_size / 2:
-            result += [0] * window_size
-            step += [0]
-        else:
-            result += [1] * window_size
-            step += [1]
-        i += 1
-    return step, result
+def audiofilter(flagsInd, classnum):
+	'''Filtering the audio signal'''
+	window_size = 8
+	i = 0
+	step, result = [], []
+	length = len(flagsInd)
+	classn = [0] * classnum
+	while i < length / window_size:
+		window = flagsInd[i*window_size:(i+1)*window_size]
+		for flag in window:
+			class6[int(flag)] += 1
+		v = class6.index(max(classn))
+		result += [v] * window_size
+		step += [v]
+		classn = [0] * classnum
+		i += 1	
+	return step, result
 
 
 def array2list(flag):
-    # r = flag.split(' ')
     r = flag.tolist()
     return r
 
@@ -35,12 +32,10 @@ def read_seg_points(audio_step, window_size):
         if audio_step[i] == flag and count < max_step:
             count += 1
         else:		
-            #time_steps.append([flag,time_stamp,time_stamp+window_size*count])
             time_steps.append([time_stamp,time_stamp+window_size*count, flag])
             flag = audio_step[i]
             time_stamp += window_size * count		
             count = 1
-    #time_steps.append([flag,time_stamp,time_stamp+window_size*count])
     time_steps.append([time_stamp,time_stamp+window_size*count, flag])
     return time_steps
     '''for step in time_steps:

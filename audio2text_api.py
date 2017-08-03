@@ -112,7 +112,7 @@ def audio2text():
     i = 0
     h_data = []
     ht = HBaseAji(table='wahaha')
-    typename = {0: 'music', 1: 'speech'}
+    typename = {0: 'music', 1: 'speech', 2: 'bgspeech', 3: 'ad', 4: 'puremusic', 5: 'silence'}
     for s in seg_points:
         if s[2] == 1:
             h_data.append((file_name, s[0], s[1], s[2], text_result['text'][i]))
